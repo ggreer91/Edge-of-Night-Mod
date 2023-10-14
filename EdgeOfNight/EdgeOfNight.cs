@@ -9,6 +9,7 @@ using R2API.Utils;
 
 using RoR2;
 using UnityEngine;
+using Mono.Security.Authenticode;
 
 
 namespace EdgeOfNightMod

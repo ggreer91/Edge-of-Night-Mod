@@ -11,6 +11,7 @@ namespace EdgeOfNightMod
 {
     internal static class Assets
     {
+        public static float exampleValue = 5f;
         internal static GameObject EdgeOfNightPrefab;
         internal static Sprite EdgeOfNightIcon;
 
@@ -49,7 +50,9 @@ namespace EdgeOfNightMod
             EdgeOfNightItemDef.pickupToken = "EDGEOFNIGHT_PICKUP";
             EdgeOfNightItemDef.descriptionToken = "EDGEOFNIGHT_DESC";
             EdgeOfNightItemDef.loreToken = "EDGEOFNIGHT_LORE";
-            EdgeOfNightItemDef.tags = [ ItemTag.Utility ];
+            EdgeOfNightItemDef.tags = [ ItemTag.Utility, ItemTag.Damage ];
+            EdgeOfNightItemDef.canRemove = true;
+            EdgeOfNightItemDef.hidden = false;
 
             var itemDisplayRules = new ItemDisplayRuleDict(null); // make null if we don't want the item on the survivor model
             //var itemDisplayRules = new ItemDisplayRule[1]; // allows item to show on survivor
@@ -90,7 +93,7 @@ namespace EdgeOfNightMod
 
             LanguageAPI.Add("EDGEOFNIGHT_NAME", "Edge of Night");
             LanguageAPI.Add("EDGEOFNIGHT_PICKUP", "Absorbs an instance of an Elite effect.");
-            LanguageAPI.Add("EDGEOFNIGHT_DESC", "Gain <style=cIsUtility>" + 2 + "%</style> crit chance and <style=cIsDamage>" + 3 + "%</style> crit damage"); // currently only showing in logbook
+            LanguageAPI.Add("EDGEOFNIGHT_DESC", "Upon being afflicted by an Elite effect, instead absorb it, gaining that <style=cIsDamage>" + "power" + "</style> for <style=cIsUtility>" + "3s" + "</style> <style=cStack>" + "(+2s per stack)" + "</style>. Recharges every <style=cIsUtility>" + "8" + "</style> seconds <style=cStack>" + "(-10% per stack)" + "</style>."); // currently only showing in logbook
             LanguageAPI.Add("EDGEOFNIGHT_LORE", "I don't know what this is, but I'll surely find a use for it someday...");
         }
     }
