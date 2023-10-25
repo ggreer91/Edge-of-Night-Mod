@@ -11,13 +11,10 @@ namespace EdgeOfNightMod
 {
     internal static class Assets
     {
-        public static float exampleValue = 5f;
         internal static GameObject EdgeOfNightPrefab;
         internal static Sprite EdgeOfNightIcon;
-
         internal static ItemDef EdgeOfNightItemDef;
         internal static ManualLogSource Logger;
-
         private const string ModPrefix = "@EdgeOfNightMod:";
 
         internal static void Init(ManualLogSource Logger)
@@ -33,7 +30,6 @@ namespace EdgeOfNightMod
             }
 
             CreateEdgeOfNightItem();
-
             AddLanguageTokens();
         }
 

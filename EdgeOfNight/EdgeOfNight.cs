@@ -24,7 +24,6 @@ namespace EdgeOfNightMod
         public const string ModName = "EdgeofNightMod";
         public const string PluginGUID = $"{ModAuthor}.{ModName}";
 
-        // internal new static ManualLogSource Log;
         public static BepInEx.Logging.ManualLogSource Log;
 
         private static System.Random random = new System.Random();
