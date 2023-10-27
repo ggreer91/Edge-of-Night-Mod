@@ -26,10 +26,7 @@ namespace EdgeOfNightMod
 
         public static BepInEx.Logging.ManualLogSource Log;
 
-        //private static System.Random random = new System.Random();
-        //private static bool debounce = false;
-
-        private static float edgeOfNightBuffDuration = 3f;
+        private static float buffDuration = 3f;
 
         public void Awake()
         {
@@ -78,85 +75,9 @@ namespace EdgeOfNightMod
                 BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[i];
                 if (damageReport.attackerBody.HasBuff(buffIndex))
                 {
-                    damageReport.victimBody.AddTimedBuff(buffIndex, edgeOfNightBuffDuration);
+                    damageReport.victimBody.AddTimedBuff(buffIndex, buffDuration);
                 }
             }
-
-            /*
-             * 
-             * ------------------------------ EVERYTHING BELOW THIS COMMENT THAT IS COMMENTED IS FOR A CHARMING EFFECT ------------------------------
-             * 
-             */
-            //    if (self.healthComponent.isHealthLow)
-            //    {
-            //        // we've already executed - skip...
-            //        if (debounce)
-            //        {
-            //            return;
-            //        }
-
-            //        debounce = true;
-            //        for (int i = 0; i <= edgeOfNight_count; i++)
-            //        {
-            //            var monsters = TeamComponent.GetTeamMembers(TeamIndex.Monster);
-            //            if (monsters.Count == 0) // nothing to charm
-            //            {
-            //                return;
-            //            }
-
-            //            // copy our monsters list into a randomly sorted order
-            //            // it's O(n), but it's the best we can really do here...
-            //            var monsters_copy = new List<TeamComponent>(monsters).OrderBy(x => random.Next()).ToList();
-
-            //            // grab our random monster that's not a boss
-            //            TeamComponent monster = null;
-            //            foreach (var m in monsters_copy)
-            //            {
-            //                if (!m.body.master.isBoss && BossGroup.FindBossGroup(m.body) is null)
-            //                {
-            //                    Log.Log(LogLevel.Debug, "Selected monster: " + m.body.master.name);
-            //                    monster = m;
-            //                    break;
-            //                }
-            //            }
-
-            //            // We were unable to find non-boss a monster to charm, lets just exit
-            //            // and try again later.
-            //            if (monster is null)
-            //            {
-            //                Log.Log(LogLevel.Warning, "Unable to find a suitable mob to Edge of Night (change this log lol).");
-            //                return;
-            //            }
-
-            //            // Assign to player team
-            //            monster.body.master.teamIndex = TeamIndex.Player;
-            //            monster.body.teamComponent.teamIndex = TeamIndex.Player;
-
-            //            // Reset aggro
-            //            var baseAi = monster.body.master.GetComponent<RoR2.CharacterAI.BaseAI>();
-            //            baseAi.currentEnemy.Reset();
-            //            baseAi.ForceAcquireNearestEnemyIfNoCurrentEnemy();
-            //        }
-
-            //        // reset drone aggro if needed
-            //        var players = TeamComponent.GetTeamMembers(TeamIndex.Player);
-            //        foreach (var player in players)
-            //        {
-            //            if (!player.body.isPlayerControlled)
-            //            {
-            //                var ai = player.body.masterObject.GetComponent<RoR2.CharacterAI.BaseAI>();
-            //                if (ai.currentEnemy.characterBody.teamComponent.teamIndex == TeamIndex.Player)
-            //                {
-            //                    ai.currentEnemy.Reset();
-            //                    ai.ForceAcquireNearestEnemyIfNoCurrentEnemy();
-            //                }
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        debounce = false;
-            //    }
         }
 
         // Runs on every frame
