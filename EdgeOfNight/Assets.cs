@@ -13,9 +13,10 @@ namespace EdgeOfNightMod
     {
         internal static GameObject EdgeOfNightPrefab;
         internal static Sprite EdgeOfNightIcon;
-        internal static ItemDef EdgeOfNightItemDef;
         internal static ManualLogSource Logger;
         private const string ModPrefix = "@EdgeOfNightMod:";
+
+        internal static ItemDef EdgeOfNightItemDef;
 
         internal static void Init(ManualLogSource Logger)
         {
@@ -88,9 +89,9 @@ namespace EdgeOfNightMod
             // <style=cEvent>" + exampleValue + "</style>
 
             LanguageAPI.Add("EDGEOFNIGHT_NAME", "Edge of Night");
-            LanguageAPI.Add("EDGEOFNIGHT_PICKUP", "Absorbs an instance of an Elite effect.");
-            LanguageAPI.Add("EDGEOFNIGHT_DESC", "Upon being afflicted by an Elite effect, absorb it, gaining that <style=cIsDamage>" + "power" + "</style> for <style=cIsUtility>" + "3s" + "</style> <style=cStack>" + "(+2s per stack)" + "</style>. Recharges every <style=cIsUtility>" + "8" + "</style> seconds <style=cStack>" + "(-10% per stack)" + "</style>."); // currently only showing in logbook
-            LanguageAPI.Add("EDGEOFNIGHT_LORE", "I don't know what this is, but I'll surely find a use for it someday...");
+            LanguageAPI.Add("EDGEOFNIGHT_PICKUP", "When attacked by an Elite enemy, temporarily gain that Elite's power.");
+            LanguageAPI.Add("EDGEOFNIGHT_DESC", "Upon being attacked by an Elite enemy, gain that Elite's <style=cIsDamage>" + "power" + "</style> for <style=cIsUtility>" + "3s" + "</style> <style=cStack>" + "(+2s per stack)" + "</style>. Recharges every <style=cIsUtility>" + "8" + "</style> seconds <style=cStack>" + "(-10% per stack)" + "</style>."); // currently only showing in logbook
+            LanguageAPI.Add("EDGEOFNIGHT_LORE", "It's just a cool-looking cape..?");
         }
     }
 }

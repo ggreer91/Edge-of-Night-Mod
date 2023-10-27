@@ -26,14 +26,22 @@ namespace EdgeOfNightMod
 
         public static BepInEx.Logging.ManualLogSource Log;
 
-        private static float buffDuration = 3f;
+        //public static BuffDef myBuffDef;
+
+        private static float buffDuration = 1f;
 
         public void Awake()
         {
             Log = Logger;
             Assets.Init(Log);
+
+            // Creating Edge of Night buff
+            //ContentAddition.AddBuffDef(myBuffDef);
+            //CreateBuff();
+
             On.RoR2.CharacterBody.OnTakeDamageServer += (orig, self, damageReport) => { VerifyBody(orig, self, damageReport); };
         }
+
         public static void VerifyBody(On.RoR2.CharacterBody.orig_OnTakeDamageServer orig, CharacterBody self, DamageReport damageReport)
         {
             if (!self.Equals(null) && self.isPlayerControlled)
@@ -41,41 +49,34 @@ namespace EdgeOfNightMod
                 int edgeOfNight_count = self.inventory.GetItemCount(Assets.EdgeOfNightItemDef);
                 if (edgeOfNight_count > 0)
                 {
-                    DoEdgeOfNight(edgeOfNight_count, self, damageReport);
+                    ActivateEffect(edgeOfNight_count, self, damageReport);
                 }
             }
 
             orig(self, damageReport);
         }
 
-        public static void DoEdgeOfNight(int edgeOfNight_count, CharacterBody self, DamageReport damageReport)
-        {
-            /*
-             * Wake of Vultures code for reference:
-             * 
-             *  int itemCount9 = inventory.GetItemCount(RoR2Content.Items.HeadHunter);
-				int itemCount10 = inventory.GetItemCount(RoR2Content.Items.KillEliteFrenzy);
-				if (itemCount9 > 0)
-				{
-					float duration = 3f + 5f * (float)itemCount9;
-					for (int k = 0; k < BuffCatalog.eliteBuffIndices.Length; k++)
-					{
-						BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[k];
-						if (victimBody.HasBuff(buffIndex))
-						{
-							attackerBody.AddTimedBuff(buffIndex, duration);
-						}
-					}
-				}
-            */
+        //private static void CreateBuff()
+        //{
+        //    myBuffDef = ScriptableObject.CreateInstance<BuffDef>();
+        //    myBuffDef.iconSprite = Assets.EdgeOfNightIcon;
+        //    myBuffDef.name = "EdgeOfNightBuff";
+        //    myBuffDef.canStack = false;
+        //    myBuffDef.isDebuff = false;
+        //    myBuffDef.isCooldown = false;
+        //    myBuffDef.isHidden = false;
+        //    myBuffDef.buffColor = Color.green;
+        //}
 
-            Log.LogInfo($"Damage report: {damageReport}");
+        private static void ActivateEffect(int edgeOfNight_count, CharacterBody self, DamageReport damageReport)
+        {
+            Log.LogInfo($"Damage report: {damageReport}"); // temporary line
             for (int i = 0; i < BuffCatalog.eliteBuffIndices.Length; i++)
             {
                 BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[i];
                 if (damageReport.attackerBody.HasBuff(buffIndex))
                 {
-                    damageReport.victimBody.AddTimedBuff(buffIndex, buffDuration);
+                    damageReport.victimBody.AddTimedBuff(buffIndex, (buffDuration + (2 * edgeOfNight_count)));
                 }
             }
         }
