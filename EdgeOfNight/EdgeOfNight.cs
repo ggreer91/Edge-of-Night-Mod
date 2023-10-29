@@ -10,7 +10,7 @@ using R2API.Utils;
 using RoR2;
 using UnityEngine;
 using Mono.Security.Authenticode;
-
+using System.IO;
 
 namespace EdgeOfNightMod
 {
@@ -26,7 +26,7 @@ namespace EdgeOfNightMod
 
         public static BepInEx.Logging.ManualLogSource Log;
 
-        //public static BuffDef myBuffDef;
+        public static BuffDef myBuffDef;
 
         private static float buffDuration = 1f;
 
@@ -36,10 +36,10 @@ namespace EdgeOfNightMod
             Assets.Init(Log);
 
             // Creating Edge of Night buff
-            //ContentAddition.AddBuffDef(myBuffDef);
-            //CreateBuff();
+            CreateBuff();
 
-            On.RoR2.CharacterBody.OnTakeDamageServer += (orig, self, damageReport) => { VerifyBody(orig, self, damageReport); };
+            // Preps event handlers
+            HooksContainer();
         }
 
         public static void VerifyBody(On.RoR2.CharacterBody.orig_OnTakeDamageServer orig, CharacterBody self, DamageReport damageReport)
@@ -56,17 +56,18 @@ namespace EdgeOfNightMod
             orig(self, damageReport);
         }
 
-        //private static void CreateBuff()
-        //{
-        //    myBuffDef = ScriptableObject.CreateInstance<BuffDef>();
-        //    myBuffDef.iconSprite = Assets.EdgeOfNightIcon;
-        //    myBuffDef.name = "EdgeOfNightBuff";
-        //    myBuffDef.canStack = false;
-        //    myBuffDef.isDebuff = false;
-        //    myBuffDef.isCooldown = false;
-        //    myBuffDef.isHidden = false;
-        //    myBuffDef.buffColor = Color.green;
-        //}
+        private static void CreateBuff()
+        {
+            myBuffDef = ScriptableObject.CreateInstance<BuffDef>();
+            myBuffDef.iconSprite = Assets.EdgeOfNightIcon;
+            myBuffDef.name = "EdgeOfNightBuff";
+            myBuffDef.canStack = false;
+            myBuffDef.isDebuff = false;
+            myBuffDef.isCooldown = false;
+            myBuffDef.isHidden = false;
+            myBuffDef.buffColor = Color.white;
+            ContentAddition.AddBuffDef(myBuffDef);
+        }
 
         private static void ActivateEffect(int edgeOfNight_count, CharacterBody self, DamageReport damageReport)
         {
@@ -79,6 +80,33 @@ namespace EdgeOfNightMod
                     damageReport.victimBody.AddTimedBuff(buffIndex, (buffDuration + (2 * edgeOfNight_count)));
                 }
             }
+        }
+
+        private static void ActivateBuff(CharacterBody self)
+        {
+            Log.LogInfo("I have successfully entered ActivateBuff");
+            if (!self)
+                return;
+            if (self.inventory.GetItemCount(Assets.EdgeOfNightItemDef.itemIndex) <= 0)
+                return;
+            if (self.HasBuff(myBuffDef))
+                return;
+            //self.AddTimedBuff(myBuffDef, buffDuration);
+            self.AddBuff(myBuffDef);
+            Log.LogInfo("I have added a buff");
+        }
+
+        private static void HooksContainer()
+        {
+            On.RoR2.CharacterBody.OnTakeDamageServer += (orig, self, damageReport) => { VerifyBody(orig, self, damageReport); };
+
+            On.RoR2.CharacterBody.RecalculateStats += (orig, self) =>
+            {
+                Log.LogInfo("I am in RecalculateStats");
+                ActivateBuff(self);
+
+                orig(self);
+            };
         }
 
         // Runs on every frame
