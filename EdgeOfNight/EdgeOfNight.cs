@@ -19,12 +19,13 @@ namespace EdgeOfNightMod
     [BepInPlugin(PluginGUID, ModName, ModVer)]
     public class EdgeOfNight : BaseUnityPlugin
     {
-        private const string ModVer = "1.1";
+        private const string ModVer = "0.1";
         public const string ModAuthor = "George";
         public const string ModName = "EdgeofNightMod";
         public const string PluginGUID = $"{ModAuthor}.{ModName}";
         public static BepInEx.Logging.ManualLogSource Log;
 
+        // used vars
         public static BuffDef activeBuff;
         public static BuffDef cooldownBuff;
         public static float buffDuration = 1f;
@@ -39,6 +40,7 @@ namespace EdgeOfNightMod
             HooksContainer(); // Preps event handlers
         }
 
+        // creates both the active buff and cooldown buff
         private static void CreateBuffs()
         {
             activeBuff = ScriptableObject.CreateInstance<BuffDef>();
@@ -62,6 +64,7 @@ namespace EdgeOfNightMod
             ContentAddition.AddBuffDef(cooldownBuff);
         }
 
+        // holds all event handlers for the item
         private static void HooksContainer()
         {
             On.RoR2.CharacterBody.OnTakeDamageServer += (orig, self, damageReport) =>
@@ -86,6 +89,7 @@ namespace EdgeOfNightMod
             };
         }
 
+        // makes sure the player themself is the one who was damaged
         public static void VerifyBody(CharacterBody self, DamageReport damageReport)
         {
             if (self && self.isPlayerControlled)
@@ -98,11 +102,13 @@ namespace EdgeOfNightMod
             }
         }
 
+        // gets times for the item effect and item description (possibly temporary)
         public static int GetTotalBuffTime(int count)
         {
             return Convert.ToInt32(buffDuration + buffStackBonus * count);
         }
 
+        // gives elite effect, removes active buff, runs cooldown stacking function to begin a "cooldown"
         private static void ActivateEffect(int edgeOfNight_count, CharacterBody self, DamageReport damageReport)
         {
             if (!self.HasBuff(activeBuff))
@@ -121,6 +127,7 @@ namespace EdgeOfNightMod
             }
         }
 
+        // adds a "cooldown" in the form of stacks
         public static void AddCooldownStacks(CharacterBody self, BuffDef cooldown, float duration)
         {
             float myTimer = 1;
@@ -131,6 +138,7 @@ namespace EdgeOfNightMod
             }
         }
 
+        // gives active buff on-pickup, gives active buff whenever cooldownBuff is gone
         private static void UpdateBuff(CharacterBody self)
         {
             if (!self || !self.inventory)
@@ -143,12 +151,13 @@ namespace EdgeOfNightMod
                 self.AddBuff(activeBuff);
         }
 
+        // retrieves item description for scoreboard (possibly temporary)
         private static string GetDisplayInformation()
         {
             return Language.GetString(Assets.EdgeOfNightItemDef.descriptionToken);
         }
 
-        // Runs on every frame
+        // runs on every frame (temporary)
         private void Update()
         {
             // Checking if player presses F2
