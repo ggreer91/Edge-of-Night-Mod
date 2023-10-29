@@ -90,7 +90,7 @@ namespace EdgeOfNightMod
 
             LanguageAPI.Add("EDGEOFNIGHT_NAME", "Edge of Night");
             LanguageAPI.Add("EDGEOFNIGHT_PICKUP", "When attacked by an Elite enemy, temporarily gain that Elite's power.");
-            LanguageAPI.Add("EDGEOFNIGHT_DESC", "Upon being attacked by an Elite enemy, gain that Elite's <style=cIsDamage>" + "power" + "</style> for <style=cIsUtility>" + "3s" + "</style> <style=cStack>" + "(+2s per stack)" + "</style>. Recharges every <style=cIsUtility>" + "8" + "</style> seconds <style=cStack>" + "(-10% per stack)" + "</style>."); // currently only showing in logbook
+            LanguageAPI.Add("EDGEOFNIGHT_DESC", $"Upon being attacked by an Elite enemy, gain that Elite's <style=cIsDamage>power</style> for <style=cIsUtility>{EdgeOfNight.GetTotalBuffTime(1)}s</style> <style=cStack>(+{EdgeOfNight.buffStackBonus}s per stack)</style>. Recharges every <style=cIsUtility>{EdgeOfNight.cooldownDuration}</style> seconds.");
             LanguageAPI.Add("EDGEOFNIGHT_LORE", "It's just a cool-looking cape..?");
         }
     }

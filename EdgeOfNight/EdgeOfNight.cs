@@ -17,96 +17,135 @@ namespace EdgeOfNightMod
     [BepInDependency(R2API.R2API.PluginGUID)]
     [R2APISubmoduleDependency(nameof(ItemAPI), nameof(LanguageAPI))]
     [BepInPlugin(PluginGUID, ModName, ModVer)]
-    public class CustomItem : BaseUnityPlugin
+    public class EdgeOfNight : BaseUnityPlugin
     {
         private const string ModVer = "1.1";
         public const string ModAuthor = "George";
         public const string ModName = "EdgeofNightMod";
         public const string PluginGUID = $"{ModAuthor}.{ModName}";
-
         public static BepInEx.Logging.ManualLogSource Log;
 
-        public static BuffDef myBuffDef;
-
-        private static float buffDuration = 1f;
+        public static BuffDef activeBuff;
+        public static BuffDef cooldownBuff;
+        public static float buffDuration = 1f;
+        public static float buffStackBonus = 2f;
+        public static float cooldownDuration = 8f;
 
         public void Awake()
         {
             Log = Logger;
             Assets.Init(Log);
-
-            // Creating Edge of Night buff
-            CreateBuff();
-
-            // Preps event handlers
-            HooksContainer();
+            CreateBuffs(); // Creating Edge of Night buff
+            HooksContainer(); // Preps event handlers
         }
 
-        public static void VerifyBody(On.RoR2.CharacterBody.orig_OnTakeDamageServer orig, CharacterBody self, DamageReport damageReport)
+        private static void CreateBuffs()
         {
-            if (!self.Equals(null) && self.isPlayerControlled)
+            activeBuff = ScriptableObject.CreateInstance<BuffDef>();
+            activeBuff.iconSprite = Assets.EdgeOfNightIcon;
+            activeBuff.name = "EdgeOfNightBuff";
+            activeBuff.canStack = false;
+            activeBuff.isDebuff = false;
+            activeBuff.isCooldown = false;
+            activeBuff.isHidden = false;
+            activeBuff.buffColor = Color.white;
+            ContentAddition.AddBuffDef(activeBuff);
+
+            cooldownBuff = ScriptableObject.CreateInstance<BuffDef>();
+            cooldownBuff.iconSprite = Assets.EdgeOfNightIcon;
+            cooldownBuff.name = "EdgeOfNightCooldownBuff";
+            cooldownBuff.canStack = true;
+            cooldownBuff.isDebuff = false;
+            cooldownBuff.isCooldown = true;
+            cooldownBuff.isHidden = false;
+            cooldownBuff.buffColor = Color.gray;
+            ContentAddition.AddBuffDef(cooldownBuff);
+        }
+
+        private static void HooksContainer()
+        {
+            On.RoR2.CharacterBody.OnTakeDamageServer += (orig, self, damageReport) =>
             {
-                int edgeOfNight_count = self.inventory.GetItemCount(Assets.EdgeOfNightItemDef);
-                if (edgeOfNight_count > 0)
+                VerifyBody(self, damageReport);
+                orig(self, damageReport);
+            };
+
+            On.RoR2.CharacterBody.RecalculateStats += (orig, self) =>
+            {
+                UpdateBuff(self);
+                orig(self);
+            };
+
+            On.RoR2.UI.ItemIcon.SetItemIndex += (orig, self, newIndex, newCount) =>
+            {
+                orig(self, newIndex, newCount);
+                if (self.tooltipProvider != null && newIndex == Assets.EdgeOfNightItemDef.itemIndex)
                 {
-                    ActivateEffect(edgeOfNight_count, self, damageReport);
+                    self.tooltipProvider.overrideBodyText = GetDisplayInformation();
+                }
+            };
+        }
+
+        public static void VerifyBody(CharacterBody self, DamageReport damageReport)
+        {
+            if (self && self.isPlayerControlled)
+            {
+                int edgeOfNightCount = self.inventory.GetItemCount(Assets.EdgeOfNightItemDef);
+                if (edgeOfNightCount > 0)
+                {
+                    ActivateEffect(edgeOfNightCount, self, damageReport);
                 }
             }
-
-            orig(self, damageReport);
         }
 
-        private static void CreateBuff()
+        public static int GetTotalBuffTime(int count)
         {
-            myBuffDef = ScriptableObject.CreateInstance<BuffDef>();
-            myBuffDef.iconSprite = Assets.EdgeOfNightIcon;
-            myBuffDef.name = "EdgeOfNightBuff";
-            myBuffDef.canStack = false;
-            myBuffDef.isDebuff = false;
-            myBuffDef.isCooldown = false;
-            myBuffDef.isHidden = false;
-            myBuffDef.buffColor = Color.white;
-            ContentAddition.AddBuffDef(myBuffDef);
+            return Convert.ToInt32(buffDuration + buffStackBonus * count);
         }
 
         private static void ActivateEffect(int edgeOfNight_count, CharacterBody self, DamageReport damageReport)
         {
-            Log.LogInfo($"Damage report: {damageReport}"); // temporary line
+            if (!self.HasBuff(activeBuff))
+                return;
+            if (damageReport == null) // if damageReport doesn't exist, the damage is environmental/fall damage
+                return;
             for (int i = 0; i < BuffCatalog.eliteBuffIndices.Length; i++)
             {
                 BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[i];
                 if (damageReport.attackerBody.HasBuff(buffIndex))
                 {
-                    damageReport.victimBody.AddTimedBuff(buffIndex, (buffDuration + (2 * edgeOfNight_count)));
+                    self.AddTimedBuff(buffIndex, GetTotalBuffTime(edgeOfNight_count));
+                    self.RemoveBuff(activeBuff);
+                    AddCooldownStacks(self, cooldownBuff, cooldownDuration);
                 }
             }
         }
 
-        private static void ActivateBuff(CharacterBody self)
+        public static void AddCooldownStacks(CharacterBody self, BuffDef cooldown, float duration)
         {
-            Log.LogInfo("I have successfully entered ActivateBuff");
-            if (!self)
+            float myTimer = 1;
+            while (myTimer <= duration)
+            {
+                self.AddTimedBuff(cooldown, myTimer);
+                myTimer++;
+            }
+        }
+
+        private static void UpdateBuff(CharacterBody self)
+        {
+            if (!self || !self.inventory)
                 return;
             if (self.inventory.GetItemCount(Assets.EdgeOfNightItemDef.itemIndex) <= 0)
                 return;
-            if (self.HasBuff(myBuffDef))
+            if (self.HasBuff(activeBuff))
                 return;
-            //self.AddTimedBuff(myBuffDef, buffDuration);
-            self.AddBuff(myBuffDef);
-            Log.LogInfo("I have added a buff");
+            if (!self.HasBuff(cooldownBuff))
+                self.AddBuff(activeBuff);
         }
 
-        private static void HooksContainer()
+        private static string GetDisplayInformation()
         {
-            On.RoR2.CharacterBody.OnTakeDamageServer += (orig, self, damageReport) => { VerifyBody(orig, self, damageReport); };
-
-            On.RoR2.CharacterBody.RecalculateStats += (orig, self) =>
-            {
-                Log.LogInfo("I am in RecalculateStats");
-                ActivateBuff(self);
-
-                orig(self);
-            };
+            return Language.GetString(Assets.EdgeOfNightItemDef.descriptionToken);
         }
 
         // Runs on every frame
