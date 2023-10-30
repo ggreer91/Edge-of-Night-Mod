@@ -166,17 +166,14 @@ namespace EdgeOfNightMod
                 // Gets player body
                 GameObject playerGameObject = PlayerCharacterMasterController.instances[0].master.GetBodyObject();
                 CharacterBody body = playerGameObject.GetComponent<CharacterBody>();
-               Log.LogInfo("Player pressed F2");
                if (!body)
                {
-                   Log.LogInfo("Component body doesn't exist");
                    return;
                }
                if (Util.CheckRoll(50, body.master)) // 50/50 chance
                {
                    // if positive roll:
                    Transform playerTransform = playerGameObject.transform;
-                   Log.LogInfo($"Spawning our custom item at coordinates {playerTransform.position}");
                    PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(Assets.EdgeOfNightItemDef.itemIndex), playerTransform.position, playerTransform.forward * 20f);
                }
                else
@@ -187,7 +184,6 @@ namespace EdgeOfNightMod
                    info.crit = false;
                    info.procCoefficient = 0f;
                    body.healthComponent.TakeDamage(info);
-                   Log.LogInfo($"Player rolled negatively - took {info.damage} damage");
                }
             }
         }
