@@ -1,11 +1,5 @@
-<!-- # R2Boilerplate
+Hello! This is my code for the current Edge_Of_Night mod on [Thunderstore](https://thunderstore.io/package/George/Edge_Of_Night/).
 
-This repository contains a sample mod for Risk of Rain 2.
+Please feel free to download the mod and give me feedback through issues here on GitHub, or send me a message on Discord (my username is Mangostyles).
 
-You can clone this repository, open the visual studio solution file and compile it immediately.
-
-This repository is meant to represent best practices for starting a simple mod.
-
-Once your mod get compiled, you can utilize the Thunderstore folder for later uploading it to https://thunderstore.io/c/riskofrain2/ -->
-
-Hello! This is a WIP RoR2 mod!
+Thank you!
