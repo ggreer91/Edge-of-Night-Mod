@@ -19,7 +19,7 @@ namespace EdgeOfNightMod
     [BepInPlugin(PluginGUID, ModName, ModVer)]
     public class EdgeOfNight : BaseUnityPlugin
     {
-        private const string ModVer = "0.1";
+        public const string ModVer = "0.1.0";
         public const string ModAuthor = "George";
         public const string ModName = "EdgeofNightMod";
         public const string PluginGUID = $"{ModAuthor}.{ModName}";
