@@ -158,34 +158,34 @@ namespace EdgeOfNightMod
         }
 
         // runs on every frame (temporary)
-        private void Update()
-        {
-            // Checking if player presses F2
-            if (Input.GetKeyDown(KeyCode.F2))
-            {
-                // Gets player body
-                GameObject playerGameObject = PlayerCharacterMasterController.instances[0].master.GetBodyObject();
-                CharacterBody body = playerGameObject.GetComponent<CharacterBody>();
-               if (!body)
-               {
-                   return;
-               }
-               if (Util.CheckRoll(50, body.master)) // 50/50 chance
-               {
-                   // if positive roll:
-                   Transform playerTransform = playerGameObject.transform;
-                   PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(Assets.EdgeOfNightItemDef.itemIndex), playerTransform.position, playerTransform.forward * 20f);
-               }
-               else
-               {
-                   // if negative roll:
-                   DamageInfo info = new DamageInfo();
-                   info.damage = (body.maxHealth / 10);
-                   info.crit = false;
-                   info.procCoefficient = 0f;
-                   body.healthComponent.TakeDamage(info);
-               }
-            }
-        }
+        //private void Update()
+        //{
+        //    // Checking if player presses F2
+        //    if (Input.GetKeyDown(KeyCode.F2))
+        //    {
+        //        // Gets player body
+        //        GameObject playerGameObject = PlayerCharacterMasterController.instances[0].master.GetBodyObject();
+        //        CharacterBody body = playerGameObject.GetComponent<CharacterBody>();
+        //       if (!body)
+        //       {
+        //           return;
+        //       }
+        //       if (Util.CheckRoll(50, body.master)) // 50/50 chance
+        //       {
+        //           // if positive roll:
+        //           Transform playerTransform = playerGameObject.transform;
+        //           PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(Assets.EdgeOfNightItemDef.itemIndex), playerTransform.position, playerTransform.forward * 20f);
+        //       }
+        //       else
+        //       {
+        //           // if negative roll:
+        //           DamageInfo info = new DamageInfo();
+        //           info.damage = (body.maxHealth / 10);
+        //           info.crit = false;
+        //           info.procCoefficient = 0f;
+        //           body.healthComponent.TakeDamage(info);
+        //       }
+        //    }
+        //}
     }
 }
