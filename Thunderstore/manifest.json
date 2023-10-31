@@ -1,6 +1,6 @@
 ﻿{
 	"name": "Edge_Of_Night",
-	"version_number": "0.1.0",
+	"version_number": "0.1.1",
 	"website_url": "",
 	"description": "Adds the League of Legends item, Edge of Night, into the game!",
 	"dependencies": [

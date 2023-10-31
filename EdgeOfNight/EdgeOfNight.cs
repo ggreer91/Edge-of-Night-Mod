@@ -19,7 +19,7 @@ namespace EdgeOfNightMod
     [BepInPlugin(PluginGUID, ModName, ModVer)]
     public class EdgeOfNight : BaseUnityPlugin
     {
-        public const string ModVer = "0.1.0";
+        public const string ModVer = "0.1.1";
         public const string ModAuthor = "George";
         public const string ModName = "EdgeofNightMod";
         public const string PluginGUID = $"{ModAuthor}.{ModName}";
@@ -45,7 +45,7 @@ namespace EdgeOfNightMod
         {
             activeBuff = ScriptableObject.CreateInstance<BuffDef>();
             activeBuff.iconSprite = Assets.EdgeOfNightIcon;
-            activeBuff.name = "EdgeOfNightBuff";
+            activeBuff.name = "EDGEOFNIGHT_BUFF";
             activeBuff.canStack = false;
             activeBuff.isDebuff = false;
             activeBuff.isCooldown = false;
@@ -55,7 +55,7 @@ namespace EdgeOfNightMod
 
             cooldownBuff = ScriptableObject.CreateInstance<BuffDef>();
             cooldownBuff.iconSprite = Assets.EdgeOfNightIcon;
-            cooldownBuff.name = "EdgeOfNightCooldownBuff";
+            cooldownBuff.name = "EDGEOFNIGHT_COOLDOWN";
             cooldownBuff.canStack = true;
             cooldownBuff.isDebuff = false;
             cooldownBuff.isCooldown = true;
