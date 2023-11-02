@@ -22,7 +22,7 @@ namespace EdgeOfNightMod
         {
             Assets.Logger = Logger;
 
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("EdgeOfNight.eonassetbundle"))
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("EdgeOfNight.Assets.eonassetbundle"))
             {
                 var bundle = AssetBundle.LoadFromStream(stream);
 

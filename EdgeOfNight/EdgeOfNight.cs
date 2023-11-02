@@ -123,6 +123,7 @@ namespace EdgeOfNightMod
                     self.AddTimedBuff(buffIndex, GetTotalBuffTime(edgeOfNight_count));
                     self.RemoveBuff(activeBuff);
                     AddCooldownStacks(self, cooldownBuff, cooldownDuration);
+                    AkSoundEngine.PostEvent(4094061087, self.gameObject);
                 }
             }
         }
@@ -148,7 +149,11 @@ namespace EdgeOfNightMod
             if (self.HasBuff(activeBuff))
                 return;
             if (!self.HasBuff(cooldownBuff))
+            {
                 self.AddBuff(activeBuff);
+                AkSoundEngine.PostEvent(3231506196, self.gameObject);
+            }
+
         }
 
         // retrieves item description for scoreboard (possibly temporary)

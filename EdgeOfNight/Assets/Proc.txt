@@ -1,0 +1,9 @@
+Event	ID	Name			Wwise Object Path	Notes
+	4094061087	Play_Edge_of_Night_Proc			\Default Work Unit\Play_Edge_of_Night_Proc	
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	3673881719	Volume_SFX			\Default Work Unit\Volume_SFX	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	98018545	Edge_of_Night_Proc	C:\Users\Admin\Documents\WwiseProjects\Edge of Night Sounds\.cache\Windows\SFX\Edge_of_Night_Proc_05842A19.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX_Mixxer\Edge_of_Night_Proc		16512
+

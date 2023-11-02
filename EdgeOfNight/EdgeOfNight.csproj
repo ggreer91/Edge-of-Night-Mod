@@ -13,11 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\eonassetbundle" />
     <None Remove="eonassetbundle" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="eonassetbundle" />
+    <EmbeddedResource Include="Assets\eonassetbundle" />
   </ItemGroup>
 
   <ItemGroup>
@@ -262,11 +263,12 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(ProjectDir)bin\Debug\netstandard2.0\EdgeOfNight.dll" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
     <Copy SourceFiles="$(ProjectDir)bin\Debug\netstandard2.0\EdgeOfNight.pdb" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
-    <!-- <Copy SourceFiles="$(ProjectDir)Assets\icons" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
-    <Copy SourceFiles="$(ProjectDir)Assets\prefabs" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
-    <Copy SourceFiles="$(ProjectDir)Assets\Soundbank.bnk" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
-    <Move SourceFiles="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal\Soundbank.bnk" DestinationFiles="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal\Soundbank.sound" />
-    <Copy SourceFiles="$(ProjectDir)../manifest.json" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
+    <Copy SourceFiles="$(ProjectDir)Assets\Off_CD.bnk" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
+    <Move SourceFiles="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal\Off_CD.bnk" DestinationFiles="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal\Off_CD.sound" />
+    <Copy SourceFiles="$(ProjectDir)Assets\Proc.bnk" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
+    <Move SourceFiles="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal\Proc.bnk" DestinationFiles="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal\Proc.sound" />
+
+    <!-- <Copy SourceFiles="$(ProjectDir)../manifest.json" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
     <Copy SourceFiles="$(ProjectDir)../README.md" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" />
     <Copy SourceFiles="$(ProjectDir)../icon.png" DestinationFolder="C:\Users\Admin\AppData\Roaming\Thunderstore Mod Manager\DataFolder\RiskOfRain2\profiles\Dev\BepInEx\plugins\George-EdgeOfNightLocal" /> -->
   </Target>
