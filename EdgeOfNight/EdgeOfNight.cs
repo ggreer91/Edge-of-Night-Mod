@@ -18,7 +18,7 @@ namespace EdgeOfNightMod
     [BepInPlugin(PluginGUID, ModName, ModVer)]
     public class EdgeOfNight : BaseUnityPlugin
     {
-        public const string ModVer = "0.1.1";
+        public const string ModVer = "0.1.2";
         public const string ModAuthor = "George";
         public const string ModName = "EdgeofNightMod";
         public const string PluginGUID = $"{ModAuthor}.{ModName}";
@@ -124,7 +124,7 @@ namespace EdgeOfNightMod
                     self.AddTimedBuff(buffIndex, GetTotalBuffTime(edgeOfNight_count));
                     self.RemoveBuff(activeBuff);
                     AddCooldownStacks(self, cooldownBuff, cooldownDuration);
-                    AkSoundEngine.PostEvent(procSoundEventID, self.gameObject);
+                    AkSoundEngine.PostEvent(procSoundEventID, self.gameObject); // adds triggered sound effect
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace EdgeOfNightMod
             if (!self.HasBuff(cooldownBuff))
             {
                 self.AddBuff(activeBuff);
-                AkSoundEngine.PostEvent(offCooldownSoundEventID, self.gameObject);
+                AkSoundEngine.PostEvent(offCooldownSoundEventID, self.gameObject); // adds off-cooldown sound effect
             }
 
         }
