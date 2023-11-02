@@ -31,6 +31,8 @@ namespace EdgeOfNightMod
         public static float buffDuration = 1f;
         public static float buffStackBonus = 2f;
         public static float cooldownDuration = 8f;
+        public static uint procSoundEventID = 4094061087;
+        public static uint offCooldownSoundEventID = 3231506196;
 
         public void Awake()
         {
@@ -123,7 +125,7 @@ namespace EdgeOfNightMod
                     self.AddTimedBuff(buffIndex, GetTotalBuffTime(edgeOfNight_count));
                     self.RemoveBuff(activeBuff);
                     AddCooldownStacks(self, cooldownBuff, cooldownDuration);
-                    AkSoundEngine.PostEvent(4094061087, self.gameObject);
+                    AkSoundEngine.PostEvent(procSoundEventID, self.gameObject);
                 }
             }
         }
@@ -151,7 +153,7 @@ namespace EdgeOfNightMod
             if (!self.HasBuff(cooldownBuff))
             {
                 self.AddBuff(activeBuff);
-                AkSoundEngine.PostEvent(3231506196, self.gameObject);
+                AkSoundEngine.PostEvent(offCooldownSoundEventID, self.gameObject);
             }
 
         }
