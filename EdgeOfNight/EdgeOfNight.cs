@@ -15,7 +15,6 @@ using System.IO;
 namespace EdgeOfNightMod
 {
     [BepInDependency(R2API.R2API.PluginGUID)]
-    [R2APISubmoduleDependency(nameof(ItemAPI), nameof(LanguageAPI))]
     [BepInPlugin(PluginGUID, ModName, ModVer)]
     public class EdgeOfNight : BaseUnityPlugin
     {
