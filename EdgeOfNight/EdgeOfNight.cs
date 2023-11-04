@@ -93,6 +93,8 @@ namespace EdgeOfNightMod
         // makes sure the player themself is the one who was damaged
         public static void VerifyBody(CharacterBody self, DamageReport damageReport)
         {
+            if (damageReport.attackerBody == null) // if attackerBody doesn't exist, the damage is environmental/health cost
+                return;
             if (self && self.isPlayerControlled)
             {
                 int edgeOfNightCount = self.inventory.GetItemCount(Assets.EdgeOfNightItemDef);
@@ -114,8 +116,6 @@ namespace EdgeOfNightMod
         {
             if (!self.HasBuff(activeBuff))
                 return;
-            if (damageReport == null) // if damageReport doesn't exist, the damage is environmental/fall damage
-                return;
             for (int i = 0; i < BuffCatalog.eliteBuffIndices.Length; i++)
             {
                 BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[i];
@@ -124,7 +124,7 @@ namespace EdgeOfNightMod
                     self.AddTimedBuff(buffIndex, GetTotalBuffTime(edgeOfNight_count));
                     self.RemoveBuff(activeBuff);
                     AddCooldownStacks(self, cooldownBuff, cooldownDuration);
-                    AkSoundEngine.PostEvent(procSoundEventID, self.gameObject); // adds triggered sound effect
+                    AkSoundEngine.PostEvent(procSoundEventID, self.gameObject); // plays triggered sound effect
                 }
             }
         }
