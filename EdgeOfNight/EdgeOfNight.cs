@@ -18,7 +18,7 @@ namespace EdgeOfNightMod
     [BepInPlugin(PluginGUID, ModName, ModVer)]
     public class EdgeOfNight : BaseUnityPlugin
     {
-        public const string ModVer = "0.1.3";
+        public const string ModVer = "0.1.4";
         public const string ModAuthor = "George";
         public const string ModName = "EdgeofNightMod";
         public const string PluginGUID = $"{ModAuthor}.{ModName}";
@@ -32,6 +32,7 @@ namespace EdgeOfNightMod
         public static float cooldownDuration = 8f;
         public static uint procSoundEventID = 4094061087;
         public static uint offCooldownSoundEventID = 3231506196;
+        public static GameObject EdgeOfNightSphereInstance = null;
 
         public void Awake()
         {
@@ -125,6 +126,7 @@ namespace EdgeOfNightMod
                     self.RemoveBuff(activeBuff);
                     AddCooldownStacks(self, cooldownBuff, cooldownDuration);
                     AkSoundEngine.PostEvent(procSoundEventID, self.gameObject); // plays triggered sound effect
+                    DeactivateSphere(self);
                 }
             }
         }
@@ -153,14 +155,49 @@ namespace EdgeOfNightMod
             {
                 self.AddBuff(activeBuff);
                 AkSoundEngine.PostEvent(offCooldownSoundEventID, self.gameObject); // adds off-cooldown sound effect
+                ActivateSphere(self);
             }
-
         }
 
         // retrieves item description for scoreboard (possibly temporary)
         private static string GetDisplayInformation()
         {
             return Language.GetString(Assets.EdgeOfNightItemDef.descriptionToken);
+        }
+
+        private static void CreateSphereInstance(CharacterBody self)
+        {
+            EdgeOfNightSphereInstance = GameObject.Instantiate(Assets.EdgeOfNightSpherePrefab);
+            // EdgeOfNightSphereInstance.transform.SetParent(self.gameObject.transform);
+            // EdgeOfNightSphereInstance.transform.position = self.corePosition;
+
+            TemporaryVisualEffect effect = EdgeOfNightSphereInstance.AddComponent<TemporaryVisualEffect>();
+            
+
+
+            effect.enterComponents = new MonoBehaviour[0];
+            effect.exitComponents = new MonoBehaviour[0];
+            effect.parentTransform = self.coreTransform;
+            effect.visualState = TemporaryVisualEffect.VisualState.Enter;
+            effect.healthComponent = self.healthComponent;
+
+            float radiusNum = (float)(self.bestFitRadius * 1.4);
+            EdgeOfNightSphereInstance.transform.localScale = new Vector3 (radiusNum, radiusNum, radiusNum);
+
+            EdgeOfNightSphereInstance.SetActive(false);
+        }
+
+        private static void ActivateSphere(CharacterBody self)
+        {
+            if (EdgeOfNightSphereInstance == null) {
+                CreateSphereInstance(self);
+            }
+            EdgeOfNightSphereInstance.SetActive(true);
+        }
+
+        private static void DeactivateSphere(CharacterBody self)
+        {
+            EdgeOfNightSphereInstance.SetActive(false);
         }
 
         // runs on every frame (temporary)

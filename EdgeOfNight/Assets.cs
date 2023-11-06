@@ -13,6 +13,7 @@ namespace EdgeOfNightMod
     {
         internal static GameObject EdgeOfNightPrefab;
         internal static Sprite EdgeOfNightIcon;
+        internal static GameObject EdgeOfNightSpherePrefab;
         internal static ManualLogSource Logger;
         private const string ModPrefix = "@EdgeOfNightMod:";
 
@@ -28,6 +29,7 @@ namespace EdgeOfNightMod
 
                 EdgeOfNightPrefab = bundle.LoadAsset<GameObject>("Assets/AssetsBundlesWanted/Edge_of_Night.prefab");
                 EdgeOfNightIcon = bundle.LoadAsset<Sprite>("Assets/AssetsBundlesWanted/Edge_of_Night.png");
+                EdgeOfNightSpherePrefab = bundle.LoadAsset<GameObject>("Assets/AssetsBundlesWanted/Edge_of_Night_Sphere.prefab");
             }
 
             CreateEdgeOfNightItem();
