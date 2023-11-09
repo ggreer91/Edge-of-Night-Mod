@@ -96,7 +96,7 @@ namespace EdgeOfNightMod
         {
             if (damageReport.attackerBody == null) // if attackerBody doesn't exist, the damage is environmental/health cost
                 return;
-            if (self && self.isPlayerControlled)
+            if (self || self.isPlayerControlled)
             {
                 int edgeOfNightCount = self.inventory.GetItemCount(Assets.EdgeOfNightItemDef);
                 if (edgeOfNightCount > 0)
