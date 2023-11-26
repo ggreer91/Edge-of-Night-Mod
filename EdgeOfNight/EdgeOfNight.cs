@@ -170,8 +170,8 @@ namespace EdgeOfNightMod
             GameObject sphereInstance = GameObject.Instantiate(Assets.EdgeOfNightSpherePrefab);
             TemporaryVisualEffect effect = sphereInstance.AddComponent<TemporaryVisualEffect>();
 
-            effect.enterComponents = new MonoBehaviour[0];
-            effect.exitComponents = new MonoBehaviour[0];
+            effect.enterComponents = [];
+            effect.exitComponents = [];
             effect.parentTransform = self.coreTransform;
             effect.visualState = TemporaryVisualEffect.VisualState.Enter;
             effect.healthComponent = self.healthComponent;
