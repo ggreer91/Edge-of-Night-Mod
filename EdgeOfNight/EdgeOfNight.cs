@@ -32,7 +32,7 @@ namespace EdgeOfNightMod
         public static float cooldownDuration = 8f;
         public static uint procSoundEventID = 4094061087;
         public static uint offCooldownSoundEventID = 3231506196;
-        public static Dictionary<UnityEngine.Networking.NetworkInstanceId, GameObject> sphereInstanceDict = new Dictionary<UnityEngine.Networking.NetworkInstanceId, GameObject>();
+        public static Dictionary<UnityEngine.Networking.NetworkInstanceId, GameObject> sphereInstanceDict = [];
 
         public void Awake()
         {
@@ -144,7 +144,14 @@ namespace EdgeOfNightMod
             if (!self || !self.inventory)
                 return;
             if (self.inventory.GetItemCount(Assets.EdgeOfNightItemDef.itemIndex) <= 0)
+            {
+                if (self.HasBuff(activeBuff))
+                {
+                    self.RemoveBuff(activeBuff);
+                    DeactivateSphere(self);
+                }
                 return;
+            }
             if (self.HasBuff(activeBuff))
                 return;
             if (!self.HasBuff(cooldownBuff))
@@ -181,7 +188,7 @@ namespace EdgeOfNightMod
             sphereInstanceDict.Add(self.master.netId, sphereInstance);
         }
         
-        // sets the user's visual sphere to true (becomes visible in game), or calls CreateSphereInstance to make one
+        // sets the user's visual sphere to true (becomes visible in game), or calls CreateSphereInstance to instantiate one
         private static void ActivateSphere(CharacterBody self)
         {
             if (sphereInstanceDict.TryGetValue(self.master.netId, out GameObject sphereInstance))
