@@ -71,7 +71,7 @@ namespace EdgeOfNightMod
         {
             On.RoR2.CharacterBody.OnTakeDamageServer += (orig, self, damageReport) =>
             {
-                VerifyBody(self, damageReport);
+                ActivateEffect(self, damageReport);
                 orig(self, damageReport);
             };
 
@@ -91,42 +91,38 @@ namespace EdgeOfNightMod
             };
         }
 
-        // makes sure the player themself is the one who was damaged
-        public static void VerifyBody(CharacterBody self, DamageReport damageReport)
-        {
-            if (damageReport.attackerBody == null) // if attackerBody doesn't exist, the damage is environmental/health cost
-                return;
-            if (self || self.isPlayerControlled) // accounts for item transferred bodies (like Engineer Turrets)
-            {
-                int edgeOfNightCount = self.inventory.GetItemCount(Assets.EdgeOfNightItemDef);
-                if (edgeOfNightCount > 0)
-                {
-                    ActivateEffect(edgeOfNightCount, self, damageReport);
-                }
-            }
-        }
-
         // gets times for the item effect and item description (possibly temporary)
         public static int GetTotalBuffTime(int count)
         {
             return Convert.ToInt32(buffDuration + buffStackBonus * count);
         }
 
-        // gives elite effect, removes active buff, runs cooldown stacking function to begin a "cooldown"
-        private static void ActivateEffect(int edgeOfNight_count, CharacterBody self, DamageReport damageReport)
+        // after checking for necessities, gives the user an elite effect, removes active buff and visual sphere, and calls cooldown stacking function
+        private static void ActivateEffect(CharacterBody self, DamageReport damageReport)
         {
+            if (damageReport.attackerBody == null)
+                return;
+            if (!self || !self.isPlayerControlled)
+                return;
             if (!self.HasBuff(activeBuff))
                 return;
-            for (int i = 0; i < BuffCatalog.eliteBuffIndices.Length; i++)
+            int edgeOfNightCount = self.inventory.GetItemCount(Assets.EdgeOfNightItemDef);
+            if (edgeOfNightCount > 0)
             {
-                BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[i];
-                if (damageReport.attackerBody.HasBuff(buffIndex))
+                if (damageReport.attackerBody.isElite)
                 {
-                    self.AddTimedBuff(buffIndex, GetTotalBuffTime(edgeOfNight_count));
-                    self.RemoveBuff(activeBuff);
-                    AddCooldownStacks(self, cooldownBuff, cooldownDuration);
-                    AkSoundEngine.PostEvent(procSoundEventID, self.gameObject); // plays triggered sound effect
-                    DeactivateSphere(self);
+                    for (int i = 0; i < BuffCatalog.eliteBuffIndices.Length; i++)
+                    {
+                        BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[i];
+                        if (damageReport.attackerBody.HasBuff(buffIndex))
+                        {
+                            self.AddTimedBuff(buffIndex, GetTotalBuffTime(edgeOfNightCount));
+                            self.RemoveBuff(activeBuff);
+                            AddCooldownStacks(self, cooldownBuff, cooldownDuration);
+                            AkSoundEngine.PostEvent(procSoundEventID, self.gameObject); // plays triggered sound effect
+                            DeactivateSphere(self);
+                        }
+                    }
                 }
             }
         }
@@ -142,7 +138,7 @@ namespace EdgeOfNightMod
             }
         }
 
-        // gives active buff on-pickup, gives active buff whenever cooldownBuff is gone
+        // after checking for necessities, gives active buff on-pickup, gives active buff whenever cooldownBuff is gone
         private static void UpdateBuff(CharacterBody self)
         {
             if (!self || !self.inventory)
@@ -154,17 +150,18 @@ namespace EdgeOfNightMod
             if (!self.HasBuff(cooldownBuff))
             {
                 self.AddBuff(activeBuff);
-                AkSoundEngine.PostEvent(offCooldownSoundEventID, self.gameObject); // adds off-cooldown sound effect
+                AkSoundEngine.PostEvent(offCooldownSoundEventID, self.gameObject); // plays off-cooldown sound effect
                 ActivateSphere(self);
             }
         }
 
-        // retrieves item description for scoreboard (possibly temporary)
+        // retrieves item description for scoreboard
         private static string GetDisplayInformation()
         {
             return Language.GetString(Assets.EdgeOfNightItemDef.descriptionToken);
         }
 
+        // creates an instance of a visual sphere to be placed on the user
         private static void CreateSphereInstance(CharacterBody self)
         {
             GameObject sphereInstance = GameObject.Instantiate(Assets.EdgeOfNightSpherePrefab);
@@ -183,7 +180,8 @@ namespace EdgeOfNightMod
 
             sphereInstanceDict.Add(self.master.netId, sphereInstance);
         }
-
+        
+        // sets the user's visual sphere to true (becomes visible in game), or calls CreateSphereInstance to make one
         private static void ActivateSphere(CharacterBody self)
         {
             if (sphereInstanceDict.TryGetValue(self.master.netId, out GameObject sphereInstance))
@@ -196,6 +194,7 @@ namespace EdgeOfNightMod
             }
         }
 
+        // sets the user's visual sphere to false (becomes invisible in game)
         private static void DeactivateSphere(CharacterBody self)
         {
             if (sphereInstanceDict.TryGetValue(self.master.netId, out GameObject sphereInstance))
@@ -204,9 +203,9 @@ namespace EdgeOfNightMod
             }
         }
 
-        // runs on every frame (temporary)
-        //private void Update()
-        //{
+        // spawns Edge of Night item on successful F2 roll (for testing only)
+        // private void Update()
+        // {
         //    // Checking if player presses F2
         //    if (Input.GetKeyDown(KeyCode.F2))
         //    {
@@ -233,6 +232,6 @@ namespace EdgeOfNightMod
         //           body.healthComponent.TakeDamage(info);
         //       }
         //    }
-        //}
+        // }
     }
 }
